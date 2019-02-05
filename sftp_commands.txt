@@ -1,0 +1,64 @@
+Link -> https://www.digitalocean.com/community/tutorials/como-utilizar-o-sftp-para-transferir-arquivos-com-seguranca-com-um-servidor-remoto-pt
+
+Acessando Máquinas Remotas via sfpt
+"""
+SFTP, que significa SSH File Transfer Protocol, ou Secure File Transfer Protocol, é um protocolo separado, empacotado com SSH que funciona de forma similar em cima de uma conexão segura. A vantagem é a capacidade de prover uma conexão segura para transferir arquivos, e cruzar o sistema de arquivo tanto na máquina local quanto na remota.
+"""
+
+Para se conectar a uma máquina remota via ssh:
+ssh username@remote_hostname_or_IP
+
+
+Para se conectar a uma máquina remota via sftp:
+sftp username@remote_hostname_or_IP
+sftp ip_da_maquina
+
+
+Quando nos conectarmos com sfpt podemos interagir normalmente com diretório remoto, por exemplo:
+sftp> ls    -> lista os arquivos do diretório atual
+sftp> cp diretorio   -> entra no diretório
+
+
+Para interagir com o diretório atual/local ao invés do remoto temos que adicionar um 'l' na frente:
+Por exemplo:
+sftp> lls   -> equivale ao ls
+sftp> lmkdir -> equivale ao mkdir
+
+
+TRANSFERINDO ARQUIVOS COM SFTP
+
+-Transferindo arquivos remotos para o sistema local
+Se quisermos realizar um download do nosso host remoto:
+
+get remoteFile  -> O comando 'get' baixa um arquivo remoto(diretório atual)com o mesmo nome para o sistema de arquivos local(baixa no diretório atual)
+get nome_do_arquivo outro_nome  -> Podemos fazer o download do arquivo dando a ele outro nome
+
+Podemos utilizar o comando get para copiar um diretório com todo o seu conteúdo com:
+get -r nome_do_diretorio
+
+Podemos manter as permissões e horários de acesso com as flags "-p" ou "-P":
+get -Pr path_do_diretorio
+
+-Transferindo arquivos locais para o sistema remoto
+O comando "put" transfere arquivos locais para o remoto:
+
+put arquivo_local
+
+As mesmas flags e opções do 'get' funcionam no 'put'. Assim para copiar um diretório inteiro:
+put -r diretorio_local
+
+
+
+UTILIZANDO 'mget'
+O comando 'mget' funciona com glob do linux
+
+sftp> mget *.pdf  -> faz o download de todos os arquivo com extensão .pdf do diretório remoto(diretorio atual) para o local(diretorio atual)
+sftp> mget path_remoto path_local -> podemos passar o caminho do arquivo que queremos copiar
+sftp> mget /home/root/imagem.jpg /home/root/imagens/
+
+*** Exemplo de 'mget' ***
+sftp> mget /home/usuario_remoto/documentos/* /home/usuario_local/doc_local/ -> vai copiar todos os arquivos do diretório 'documentos' para o diretorio 'doc_local' 
+
+sftp> mget /home/usuario_remoto/documento/*remoto* /home/usuario_local/doc_local/ -> vai copiar/fazer o download de todos os arquivos que tenham 'remoto' em seu nome.
+
+
